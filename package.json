@@ -17,7 +17,7 @@
     "build-full": "npm run build-publish && npm run build-storybook",
     "build-storybook": "build-storybook -s ./public",
     "build-publish": "npm run build && npm publish",
-    "build-css": "lessc --js ./src/fmlx.less ./public/fmlx.css && lessc --js ./src/fmlx.less ./src/fmlx.css",
+    "build-css": "lessc --js ./src/style.less ./public/style.css && lessc --js ./src/style.less ./src/style.css",
     "yalc-publish": "npm run build && yalc push",
     "yalc-push": "npm run build && yalc push",
     "new:comp": "hygen new component"
