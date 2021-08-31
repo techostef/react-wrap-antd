@@ -1,4 +1,4 @@
 
 
 ## Demo
-Open[http://hydra-storybook.local/?path=/story/example-introduction--page](http://hydra-storybook.local/?path=/story/example-introduction--page) to view it in the browser
+Open Demo [https://techostef.github.io/react-wrap-antd/](https://techostef.github.io/react-wrap-antd/) to view it in the browser

@@ -8184,7 +8184,6 @@ _:-ms-fullscreen .ant-picker-range-wrapper .ant-picker-year-panel .ant-picker-ce
   font-size: 14px;
   line-height: 1.5715;
   transition: color 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
-  padding-top: 0px;
 }
 .ant-form-item .ant-input-textarea-show-count::after {
   margin-bottom: -22px;

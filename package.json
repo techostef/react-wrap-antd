@@ -15,7 +15,7 @@
     "table": "jest -- table",
     "storybook": "start-storybook -s ./public -p 6006",
     "build-full": "npm run build-publish && npm run build-storybook",
-    "build-storybook": "build-storybook -s ./public",
+    "build-storybook": "npm run build-css && build-storybook -s ./public",
     "build-publish": "npm run build && npm publish",
     "build-css": "lessc --js ./src/style.less ./public/style.css && lessc --js ./src/style.less ./src/style.css",
     "yalc-publish": "npm run build && yalc push",
