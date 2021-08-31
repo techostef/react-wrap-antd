@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "commonjs",
+    "target": "es5",
+    "lib": [ "es2015", "dom" ],
+    "sourceMap": true ,
+    "declaration": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "./dist", // result build path
+    "jsx": "react",
+    "moduleResolution": "node",
+  },
+  "include": [
+    "../src/**/*",
+    "../typings/src/declaration.d.ts"
+  ],
+}

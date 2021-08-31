@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".", // Set a base directory to resolve non-absolute module names
+    "noImplicitAny": false, // no type annotations are present, TypeScript will fall back to a type of any for a variable when it cannot infer the type
+    "suppressImplicitAnyIndexErrors": true, // suppresses reporting the error about implicit anys when indexing into objects
+    "module": "commonjs", // Sets the module system for the program
+    "target": "es6",  // Specify ECMAScript target version
+    "lib": ["dom", "es6", "es5", "dom.iterable", "scripthost"], // List of library files to be included in the compilation
+    "sourceMap": true , // Generate corrresponding .map file
+    "declaration": true, // Generate corresponding .d.ts file
+    "outDir": "./dist", // result build path
+    "allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
+    "jsx": "react", // Support JSX in .tsx files
+    "noLib": false, // Disables the automatic inclusion of any library files
+    "moduleResolution": "node", // Specify the module resolution strategy: 'node' (Node.js) or 'classic'
+    "esModuleInterop": true, // TypeScript treats CommonJS/AMD/UMD modules similar to ES6 modules.
+    "noEmit": false, // Do not emit output (meaning do not compile code, only perform type checking)
+    "allowJs": true, // Allow JavaScript files to be compiled
+    "checkJs": false, // Javascript files using validation typescript,
+    "paths": {
+      "antd": [
+        "./node_modules/antd"
+      ]
+    }
+  },
+  "include": [
+    "src",
+    "src/index.ts",
+    "typings/src/declaration.d.ts"
+  ],
+  "exclude": [
+    "**/__test__",
+    "**/storybook"
+  ]
+}

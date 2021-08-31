@@ -1,0 +1,56 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  NUGET_EXE: 'nuget'
+  MSBUILD_EXE: 'msbuild'
+  NUNIT_CONSOLE_EXE: 'nunit3-console'
+  NODE_MODULES_CACHE_PATH: '../node_modules.cache'
+  NODE_MODULES_DEPTH: 2
+
+stages:
+  - build
+  - test
+    
+build-frontend:
+  stage: build
+  tags:
+    - cellculture-build-linux
+  only:
+    refs:
+      - branches
+    changes:
+      - "*.Web.App/UI/**/*"
+  before_script:
+    - 'git lfs pull'                                        # Ensure git lfs files are pulled
+    - 'git submodule foreach git lfs pull'                  # Ensure git lfs files are pulled (submodule)
+    - 'New-Item -ItemType Directory -Force -Path $env:NODE_MODULES_CACHE_PATH | Out-Null'
+    - '$NODE_MODULES_CACHE_LIST = (gci -name -directory -recurse -depth $env:NODE_MODULES_DEPTH -filter "node_modules" $env:NODE_MODULES_CACHE_PATH | ? { $_.endswith("UI/node_modules") } )'
+    - '$NODE_MODULES_CACHE_LIST | % { Move-Item -Path $env:NODE_MODULES_CACHE_PATH/$_ -Destination $_ }'
+  script:
+    - gci -name -directory -filter "*.Web.App" | % { pushd $_/UI && &{if (!((Test-Path (Join-Path "node_modules" "*")) -And ((gi "node_modules").LastWriteTime -gt (gi "package.json").LastWriteTime))) { npm install }} && npm run-script build; if ($LastExitCode -ne 0) { exit $LastExitCode; }; popd }
+  after_script:
+    - '$NODE_MODULES_LIST = (gci -name -directory -recurse -depth $env:NODE_MODULES_DEPTH -filter "node_modules" | ? { $_.endswith("UI/node_modules") } )'
+    - '$NODE_MODULES_LIST | % { split-path $_ -parent } | % { New-Item -Force -Path $env:NODE_MODULES_CACHE_PATH/$_ -ItemType Directory | Out-Null }'
+    - '$NODE_MODULES_LIST | % { Move-Item -Path $_ -Destination $env:NODE_MODULES_CACHE_PATH/$_ }'
+    
+test-frontend:
+  stage: test
+  needs: []                                                 # No need to wait for previous stage to complete
+  tags:
+    - cellculture-test-linux
+  only:
+    refs:
+      - branches
+    changes:
+      - "*.Web.App/UI/**/*"
+  before_script:
+    - 'git lfs pull'                                        # Ensure git lfs files are pulled
+    - 'git submodule foreach git lfs pull'                  # Ensure git lfs files are pulled (submodule)
+    - 'New-Item -ItemType Directory -Force -Path $env:NODE_MODULES_CACHE_PATH | Out-Null'
+    - '$NODE_MODULES_CACHE_LIST = (gci -name -directory -recurse -depth $env:NODE_MODULES_DEPTH -filter "node_modules" $env:NODE_MODULES_CACHE_PATH | ? { $_.endswith("UI/node_modules") } )'
+    - '$NODE_MODULES_CACHE_LIST | % { Move-Item -Path $env:NODE_MODULES_CACHE_PATH/$_ -Destination $_ }'
+  script:
+    - gci -name -directory -filter "*CellCulture.Suite20H2.Web.App" | % { pushd $_/UI && &{if (!((Test-Path (Join-Path "node_modules" "*")) -And ((gi "node_modules").LastWriteTime -gt (gi "package.json").LastWriteTime))) { npm install }} && npm run test; if ($LastExitCode -ne 0) { exit $LastExitCode; }; popd }
+  after_script:
+    - '$NODE_MODULES_LIST = (gci -name -directory -recurse -depth $env:NODE_MODULES_DEPTH -filter "node_modules" | ? { $_.endswith("UI/node_modules") } )'
+    - '$NODE_MODULES_LIST | % { split-path $_ -parent } | % { New-Item -Force -Path $env:NODE_MODULES_CACHE_PATH/$_ -ItemType Directory | Out-Null }'
+    - '$NODE_MODULES_LIST | % { Move-Item -Path $_ -Destination $env:NODE_MODULES_CACHE_PATH/$_ }'
